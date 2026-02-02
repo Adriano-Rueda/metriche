@@ -1,0 +1,20 @@
+services:
+  
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GL_LOG_LEVEL=debug
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'grafana_storage:/var/lib/grafana'
+
+  pluto:
+    build:
+      context: ./Pluto
+      dockerfile: Dockerfile
+      
+volumes:
+  grafana_storage: {}

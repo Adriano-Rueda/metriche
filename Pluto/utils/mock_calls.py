@@ -1,0 +1,82 @@
+import pandas as pd
+import re
+
+defect_rate_data_path = "resources/Modello_TCoE_Report_OKR-1_EDR.xlsx"
+total_bug_sheet_name = "TCoE_Report_OKR-1_Iniziativa-ED"
+client_report_sheet_name = "TCoE_Report_OKR-1_Iniziativa--E"
+
+time_to_test_release_path = "resources/Modello_TCoE_Report_OKR-2_Iniziativa-Tempo_Test_Release.xlsx"
+build_release_sheet_name = "License_Server"
+changelog_sheet_name = "Changelog"
+
+
+def get_defect_rate_data():
+    total_bug_df = pd.read_excel(defect_rate_data_path, sheet_name=total_bug_sheet_name)
+    client_report_df = pd.read_excel(defect_rate_data_path, sheet_name=client_report_sheet_name)
+
+    total_bug_df = pd.DataFrame({
+        "Data": total_bug_df.iloc[:, 0],
+        "Totale": total_bug_df.iloc[:, 1:].sum(axis=1)
+    })
+
+    client_report_df = pd.DataFrame({
+        "Data": client_report_df.iloc[:, 0],
+        "Totale": client_report_df.iloc[:, 1:].sum(axis=1)
+    })
+    
+    total_bug_dict = dict(zip(
+        total_bug_df["Data"],
+        total_bug_df["Totale"]
+    ))
+
+    client_report_dict = dict(zip(
+        client_report_df["Data"],
+        client_report_df["Totale"]
+    ))
+
+
+    return total_bug_dict, client_report_dict
+
+
+def helper_clean_version(version_str):
+    if isinstance(version_str, str):
+        splits = re.split('-', version_str)
+        return splits[0].strip()
+    return version_str
+
+
+def helper_parse_date(date_str):
+    if isinstance(date_str, pd.Timestamp):
+        return date_str.date()
+    return pd.to_datetime(date_str).date()
+
+def helper_parse_changelog_date(date_str):
+    [day,month,year] = re.split('/',date_str,maxsplit=2)
+    return helper_parse_date( f"{month}/{day}/{year}")
+
+    
+def get_time_to_test_release_data():
+    build_release_df = pd.read_excel(time_to_test_release_path, sheet_name=build_release_sheet_name)
+    changelog_df = pd.read_excel(time_to_test_release_path, sheet_name=changelog_sheet_name)
+
+
+    build_release_df = pd.DataFrame({
+        "Build": build_release_df.iloc[:,0].apply(helper_clean_version),
+        "release_date": build_release_df['release_date'].apply(helper_parse_date)
+    })
+   
+    build_release_dict = build_release_df.to_dict(orient='records')
+
+    changelog_df = pd.DataFrame({
+        "Version": changelog_df.iloc[:, 1],
+        "release_date": changelog_df.iloc[:, 3].apply(helper_parse_changelog_date)
+    })  
+    changelog_dict = dict(zip(
+        changelog_df["Version"],
+        changelog_df["release_date"]
+    ))
+
+    return build_release_dict, changelog_dict
+
+
+
