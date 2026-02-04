@@ -106,9 +106,11 @@ def get_test_over_FTE_data():
     def get_random_test_results():
         test_item = {
             "total_tests":random.randint(1200,1500),
-            "executed_tests":random.randint(1000,1200)
+            "executed_tests":random.randint(1000,1200),
+            "automated_test_count": random.randint(300,1500),
         }
         test_item["test_over_FTE_percentage"]= test_item["executed_tests"] / ((40*3+32*2)*2)
+        test_item["automated_percentage"]= test_item["automated_test_count"] / test_item["total_tests"]
         return test_item
     
     for i in range (1,13):
@@ -121,16 +123,18 @@ def get_test_over_FTE_data():
 
 #---------------
 
-
     for file in bugia_exports_folder:
 
         tests = pd.read_csv(os.path.join(bugia_exports_folder_path, file))
         valid_env = ["MONOTENANT", "MULTITENANT","GUI"]
         total_tests = tests.iloc[lambda x: (x["Rc version"]==0) & (x["Status"]=="TO DO") & (x["Env description"].isin(valid_env))]
         executed_tests = tests.iloc[lambda x: (x["Rc version"]!=0) & (x["Status"]!="TO DO") & (x["Env description"].isin(valid_env))]
+        automated_tests = total_tests.iloc[lambda x: (x["Automatic"] == "RANOREX AUTOMATIC")]
         
         total_tests_count = total_tests.shape[0]
         executed_tests_count = executed_tests.shape[0]
+        total_automated_tests = automated_tests.shape[0]
+        percentage_automated = total_automated_tests / total_tests_count
 
         product_name = tests.iloc[0]["Product name"] 
 
@@ -138,6 +142,8 @@ def get_test_over_FTE_data():
         test_over_FTE_data[tests.iloc[0]["Version"]][product_name] = {
             "total_tests": total_tests_count,
             "executed_tests": executed_tests_count,
+            "automated_test_count": total_automated_tests if total_automated_tests else 0,
+            "automated_percentage": percentage_automated if percentage_automated else 0,
             "test_over_FTE_percentage": (executed_tests_count / ((40*3 + 32*2)*2)) if total_tests_count > 0 else 0
         }
 
