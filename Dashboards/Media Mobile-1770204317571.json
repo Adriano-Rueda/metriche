@@ -29,7 +29,17 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -46,7 +56,25 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "date"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Date Link",
+                    "url": "http://localhost:3000/d/adctjwc/media-mobile?var-date=${__value}﻿"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 14,
@@ -56,28 +84,14 @@
       },
       "id": 3,
       "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "date"
+          }
+        ]
       },
       "pluginVersion": "12.3.2",
       "targets": [
@@ -91,6 +105,7 @@
           "root_selector": "",
           "source": "url",
           "type": "json",
+          "uql": "parse-json",
           "url": "/tempo-di-esecuzione-medio-parziale",
           "url_options": {
             "data": "",
@@ -99,7 +114,7 @@
         }
       ],
       "title": "Media Mobile Parziale",
-      "type": "bargauge"
+      "type": "table"
     },
     {
       "datasource": {
@@ -108,8 +123,15 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -136,43 +158,40 @@
       },
       "id": 2,
       "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "limit": 200,
-          "values": true
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
+        "cellHeight": "sm",
+        "showHeader": true
       },
       "pluginVersion": "12.3.2",
       "targets": [
         {
-          "columns": [],
+          "columns": [
+            {
+              "selector": "Event Date",
+              "text": "",
+              "timestampFormat": "",
+              "type": "string"
+            },
+            {
+              "selector": "test_days",
+              "text": "Test Days",
+              "type": "string"
+            },
+            {
+              "selector": "releases",
+              "text": "Releases",
+              "type": "string"
+            }
+          ],
           "filters": [],
-          "format": "as-is",
+          "format": "table",
           "global_query_id": "",
           "parser": "backend",
           "refId": "A",
-          "root_selector": "",
+          "root_selector": "$[ $toMillis(Date) = $toMillis(\"$date\") ]\n",
           "source": "url",
           "type": "json",
-          "url": "/tempo-di-esecuzione-medio",
+          "uql": "parse-json\r\n| where \"[Master Date]\" = '${date}'",
+          "url": "/montly-stat",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -181,22 +200,59 @@
       ],
       "title": "Media mobile time to test",
       "transparent": true,
-      "type": "bargauge"
+      "type": "table"
     }
   ],
   "preload": true,
   "schemaVersion": 42,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "text": "2026-02-01T00:00:00",
+          "value": "2026-02-01T00:00:00"
+        },
+        "definition": "",
+        "name": "date",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [],
+            "data": "values\nfoo\nbar\nbaz",
+            "filters": [],
+            "format": "table",
+            "parser": "backend",
+            "refId": "",
+            "root_selector": "",
+            "source": "url",
+            "type": "json",
+            "uql": "parse-json\r\n",
+            "url": "/montly-stat",
+            "url_options": {
+              "data": "",
+              "method": "GET"
+            }
+          },
+          "meta": {
+            "textField": "Date"
+          },
+          "queryType": "infinity",
+          "refId": "variable"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
   },
   "time": {
-    "from": "now-6M",
-    "to": "now"
+    "from": "2026-02-04T00:59:34.240Z",
+    "to": "2026-02-05T00:59:34.240Z"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Media Mobile",
   "uid": "adctjwc",
-  "version": 21
+  "version": 49
 }

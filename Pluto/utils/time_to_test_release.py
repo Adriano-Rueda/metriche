@@ -43,13 +43,17 @@ def get_tempo_di_esecuzione_medio():
         if date in montly_stat:
             montly_stat[date]={
                 "releases":montly_stat[date]["releases"]+1,
-                "test_days":montly_stat[date]["test_days"]+days_passed
+                "test_days":montly_stat[date]["test_days"]+days_passed,   
             }
+            montly_stat[date]["avg_test_duration"]=montly_stat[date]["test_days"] / montly_stat[date]["releases"]
         else:
             montly_stat[date]={
                 "releases":1,
-                "test_days":days_passed
+                "test_days":days_passed,
+                "avg_test_duration":days_passed
             }
+
+
 
     def recap(montly_stat):
         date = datetime.datetime( #prendo solo gli ultimi 2 anni
@@ -76,9 +80,13 @@ def get_tempo_di_esecuzione_medio():
 
         
         prova = {}
+        detailed_stats = []
+        generic_stats = []
+        
         for date,data in recap.items():
             firmware_releases = 0
             test_days = 0
+
             for i in range (1,7):
                 month = date.month
                 year = date.year
@@ -94,16 +102,24 @@ def get_tempo_di_esecuzione_medio():
                 )
 
                 if new_date in recap:
+                    month_data = recap[new_date].copy()
+                    month_data['Date']=date
+                    month_data['Event Date']=new_date
+                    detailed_stats.append(month_data)
+
                     test_days += recap[new_date]["test_days"]
                     firmware_releases += recap[new_date]["releases"]
 
-            recap[date]["media_mobile"] = test_days / firmware_releases if firmware_releases > 0 else 0
-
-            prova[date.strftime("%Y-%m")] = recap[date]["media_mobile"]
+            media_mobile = test_days / firmware_releases if firmware_releases > 0 else 0
+            recap[date]["media_mobile"] = media_mobile
+            generic_stats.append({"date":date,"media_mobile":media_mobile})
+            prova[date] = recap[date]["media_mobile"]
         
-        return prova
-    
+        return generic_stats,detailed_stats
+
+    [generic_stats,detailed_stats]= recap(montly_stat)
     return {
-        "full":recap(montly_stat),
-        "partial":recap(montly_stat_excluding_short_tests)
+        "generic_stats":generic_stats,
+        "partial":recap(montly_stat_excluding_short_tests)[0],
+        "detailed_recap":detailed_stats
     }

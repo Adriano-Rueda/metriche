@@ -30,7 +30,10 @@ async def get_tempo_di_esecuzione_medio_parziale_endpoint():
     tempo_di_esecuzione_medio = get_tempo_di_esecuzione_medio()
     return tempo_di_esecuzione_medio['partial']
 
-
+@app.get("/montly-stat")
+async def montly_stat():
+    tempo_di_esecuzione_medio = get_tempo_di_esecuzione_medio()
+    return tempo_di_esecuzione_medio['detailed_recap']
 
 @app.get("/test-per-fte")
 async def get_test_per_fte():
