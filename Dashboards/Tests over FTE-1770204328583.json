@@ -1,0 +1,369 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "dfbqjjiysnuv4e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "footer": {
+              "reducers": []
+            },
+            "hideFrom": {
+              "viz": false
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Version Link",
+                    "url": "http://localhost:3000/d/adhpmjf/tests-over-fte?var-version=${__value.text}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 93
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Tests"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 118
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Executed Tests"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tests over FTE"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 134
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Automated"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "columns": [],
+          "data": "[\n  {\n    \"Version\": \"4.17.13\",\n    \"additional_data\": [\n      { \"Product\": \"LAM\", \"Total_Tests\": 1183, \"Executed_Tests\": 1007, \"Test_over_FTE\": 2.74 },\n      { \"Product\": \"Kalliope PBX OMNIA\", \"Total_Tests\": 2028, \"Executed_Tests\": 783, \"Test_over_FTE\": 2.13 },\n      { \"Product\": \"CTI\", \"Total_Tests\": 1254, \"Executed_Tests\": 981, \"Test_over_FTE\": 2.67 }\n    ],\n    \"Total Tests\": 4465,\n    \"Executed Tests\": 2771,\n    \"Tests over FTE\": 7.53\n  }\n]",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "parser": "uql",
+          "refId": "Master",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "uql": "parse-json\r\n| project \"Version\",\"Total Tests\",\"Executed Tests\",\"Tests over FTE\", \"Automated\"",
+          "url": "/test-per-fte",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "New panel",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "dfbqjjiysnuv4e"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "hideFrom": {
+              "viz": false
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Automated"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Product"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Executed_Tests"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 123
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total_Tests"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 13,
+        "x": 11,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Version"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "columns": [],
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "uql",
+          "refId": "Detail",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "uql": "parse-json\r\nmv-expand \"additional_data\"\r\n| project \"Version\", \"Automated\"=\"additional_data.Automated\", \"Product\"=\"additional_data.Product\", \"Executed_Tests\"=\"additional_data.Executed_Tests\", \"Total_Tests\"=\"additional_data.Total_Tests\", \"Test_over_FTE\"=\"additional_data.Test_over_FTE\"\r\n| where \"Version\" == '${version}'",
+          "url": "/test-per-fte",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "New panel",
+      "type": "table"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "4.17.6",
+          "value": "4.17.6"
+        },
+        "datasource": {
+          "type": "yesoreyeram-infinity-datasource",
+          "uid": "dfbqjjiysnuv4e"
+        },
+        "definition": "",
+        "hide": 2,
+        "name": "version",
+        "options": [],
+        "query": {
+          "infinityQuery": {
+            "columns": [],
+            "data": "values\nfoo\nbar\nbaz",
+            "filters": [],
+            "format": "table",
+            "parser": "uql",
+            "refId": "",
+            "root_selector": "",
+            "source": "url",
+            "type": "json",
+            "url": "/test-per-fte",
+            "url_options": {
+              "data": "",
+              "method": "GET"
+            }
+          },
+          "queryType": "infinity",
+          "refId": "variable"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Tests over FTE",
+  "uid": "adhpmjf",
+  "version": 19
+}
