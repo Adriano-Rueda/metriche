@@ -46,7 +46,7 @@ def get_defect_rate_detailed_data():
     total_bug_df.set_index(total_bug_df.columns[0], inplace=True)
     client_report_df = pd.read_excel(defect_rate_data_path, sheet_name=client_report_sheet_name)
     client_report_df.set_index(client_report_df.columns[0], inplace=True)
-    return total_bug_df,client_report_df
+    return total_bug_df[1:],client_report_df[1:]
 #################################################################
 
 
