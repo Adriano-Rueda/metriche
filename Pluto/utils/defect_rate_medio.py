@@ -1,4 +1,7 @@
-from utils.fetch_data import fetch_defect_rate_data
+from utils.fetch_data import (
+    fetch_defect_rate_data,
+    fetch_defect_rate_detailed_data
+)
 
 
 def get_defect_rate_medio():
@@ -15,6 +18,16 @@ def get_defect_rate_medio():
             result[date] = 0
 
     return result
+
+
+def get_defect_rate_per_prodotto():
+    total_bugs_df,client_reported_bugs_df = fetch_defect_rate_detailed_data()
+
+    df_ratio = client_reported_bugs_df / total_bugs_df
+    return df_ratio
+
+
+
 
 
 if __name__ == "__main__":

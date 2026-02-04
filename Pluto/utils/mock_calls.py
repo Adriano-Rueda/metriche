@@ -1,5 +1,7 @@
+import random
 import pandas as pd
 import re
+import os
 
 defect_rate_data_path = "resources/Modello_TCoE_Report_OKR-1_EDR.xlsx"
 total_bug_sheet_name = "TCoE_Report_OKR-1_Iniziativa-ED"
@@ -9,7 +11,9 @@ time_to_test_release_path = "resources/Modello_TCoE_Report_OKR-2_Iniziativa-Temp
 build_release_sheet_name = "License_Server"
 changelog_sheet_name = "Changelog"
 
+bugia_exports_folder_path = "resources/bugia_exports/"
 
+# Get Defect Rate Data
 def get_defect_rate_data():
     total_bug_df = pd.read_excel(defect_rate_data_path, sheet_name=total_bug_sheet_name)
     client_report_df = pd.read_excel(defect_rate_data_path, sheet_name=client_report_sheet_name)
@@ -37,7 +41,16 @@ def get_defect_rate_data():
 
     return total_bug_dict, client_report_dict
 
+def get_defect_rate_detailed_data():
+    total_bug_df = pd.read_excel(defect_rate_data_path,sheet_name=total_bug_sheet_name)
+    total_bug_df.set_index(total_bug_df.columns[0], inplace=True)
+    client_report_df = pd.read_excel(defect_rate_data_path, sheet_name=client_report_sheet_name)
+    client_report_df.set_index(client_report_df.columns[0], inplace=True)
+    return total_bug_df,client_report_df
+#################################################################
 
+
+# Get Time to Test Release Data
 def helper_clean_version(version_str):
     if isinstance(version_str, str):
         splits = re.split('-', version_str)
@@ -77,6 +90,57 @@ def get_time_to_test_release_data():
     ))
 
     return build_release_dict, changelog_dict
+################################################################
 
 
 
+
+# Get Test over FTE Data
+def get_test_over_FTE_data():
+#sheet_name="TCoE_Report_OKR3_KR-3.1_WebCTI"
+    bugia_exports_folder = os.listdir(bugia_exports_folder_path)
+
+    test_over_FTE_data = {}
+
+# tmp mock data
+    def get_random_test_results():
+        test_item = {
+            "total_tests":random.randint(1200,1500),
+            "executed_tests":random.randint(1000,1200)
+        }
+        test_item["test_over_FTE_percentage"]= test_item["executed_tests"] / ((40*3+32*2)*2)
+        return test_item
+    
+    for i in range (1,13):
+        mock_version = f"4.17.{i}"
+        products = ["CTI","LAM","Kalliope PBX OMNIA","API"]
+        new_item = {}
+        for product in products:
+            new_item[product] = get_random_test_results()
+        test_over_FTE_data[mock_version] = new_item
+
+#---------------
+
+
+    for file in bugia_exports_folder:
+
+        tests = pd.read_csv(os.path.join(bugia_exports_folder_path, file))
+        valid_env = ["MONOTENANT", "MULTITENANT","GUI"]
+        total_tests = tests.iloc[lambda x: (x["Rc version"]==0) & (x["Status"]=="TO DO") & (x["Env description"].isin(valid_env))]
+        executed_tests = tests.iloc[lambda x: (x["Rc version"]!=0) & (x["Status"]!="TO DO") & (x["Env description"].isin(valid_env))]
+        
+        total_tests_count = total_tests.shape[0]
+        executed_tests_count = executed_tests.shape[0]
+
+        product_name = tests.iloc[0]["Product name"] 
+
+        test_over_FTE_data[tests.iloc[0]["Version"]] = {} if tests.iloc[0]["Version"] not in test_over_FTE_data else test_over_FTE_data[tests.iloc[0]["Version"]]
+        test_over_FTE_data[tests.iloc[0]["Version"]][product_name] = {
+            "total_tests": total_tests_count,
+            "executed_tests": executed_tests_count,
+            "test_over_FTE_percentage": (executed_tests_count / ((40*3 + 32*2)*2)) if total_tests_count > 0 else 0
+        }
+
+
+    return test_over_FTE_data
+###############################################################

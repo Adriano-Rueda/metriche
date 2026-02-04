@@ -52,9 +52,9 @@ def get_tempo_di_esecuzione_medio():
             }
 
     def recap(montly_stat):
-        date = datetime.datetime(
-            year=2016,
-            month=3,
+        date = datetime.datetime( #prendo solo gli ultimi 2 anni
+            year=datetime.datetime.today().year -2,
+            month=datetime.datetime.today().month,
             day=1
         )
         recap = {}
