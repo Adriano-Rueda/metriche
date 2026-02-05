@@ -1,4 +1,5 @@
 **/**.xlsx
+**/**.xlsx**
 **/.venb/**
 **/.env
 **/__pycache__/**

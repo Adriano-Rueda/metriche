@@ -70,6 +70,7 @@ def helper_parse_changelog_date(date_str):
     
 def get_time_to_test_release_data():
     build_release_df = pd.read_excel(time_to_test_release_path, sheet_name=build_release_sheet_name)
+    build_release_df.columns = build_release_df.columns.str.strip()
     changelog_df = pd.read_excel(time_to_test_release_path, sheet_name=changelog_sheet_name)
 
 
